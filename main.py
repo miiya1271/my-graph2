@@ -366,8 +366,3 @@ fig8.update_layout(
 )
 
 st.plotly_chart(fig8, use_container_width=True)
-
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("10위권에 머문 날수가 길수록 총 관객 수가 증가하는 명확한 양의 상관관계를 보여줍니다. 초기 상영 스크린 수나 개봉 첫 주 흥행도 중요하지만, 10위권 내에서 오래 잔류하는 '장기 흥행(롱런)' 능력이 최종 천만 관객 등 대형 흥행을 만드는 데 핵심 요소임을 알 수 있습니다.")
