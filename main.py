@@ -70,11 +70,6 @@ fig1.update_layout(
 
 st.plotly_chart(fig1, use_container_width=True)
 
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("특정 핵심 장르(드라마, 액션, 애니메이션 등)가 전체 개봉 영화 편수의 과반수 이상을 차지하며 높은 비중을 나타냅니다.")
-
 st.divider()
 
 # ==========================================
@@ -101,11 +96,6 @@ fig2.update_layout(
 )
 
 st.plotly_chart(fig2, use_container_width=True)
-
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("영화 편수가 적은 장르라 하더라도 초대형 흥행작이 포함된 경우 해당 장르가 전체 총 관객 수에서 차지하는 비중이 매우 클 수 있습니다.")
 
 st.divider()
 
@@ -135,39 +125,6 @@ fig3.update_layout(
 )
 
 st.plotly_chart(fig3, use_container_width=True)
-
-# 통계 데이터 계산
-top_movie = df.loc[df['total_audi'].idxmax()]
-top_movie_name = top_movie['movieNm']
-top_movie_audi = top_movie['total_audi']
-
-under_1m_count = len(df[df['total_audi'] < 1000000])
-under_1m_ratio = (under_1m_count / len(df)) * 100
-
-# 주요 통계 요약 카드 및 문구
-col1, col2 = st.columns(2)
-with col1:
-    st.metric(
-        label="📌 밀집 구간 (관객 수 100만 명 미만)",
-        value=f"{under_1m_count}편 ({under_1m_ratio:.1f}%)"
-    )
-with col2:
-    st.metric(
-        label="🏆 최다 관객 동원 영화",
-        value=f"{top_movie_name}",
-        delta=f"{top_movie_audi:,.0f} 명",
-        delta_color="normal"
-    )
-
-st.markdown(
-    f"📌 **분석 결과**: 대부분의 영화(**{under_1m_ratio:.1f}%**, {under_1m_count}편)가 **관객 수 100만 명 미만 구간**에 집중되어 있으며, "
-    f"가장 많은 관객 수를 기록한 영화는 **'{top_movie_name}'**(총 **{top_movie_audi:,.0f}명**)입니다."
-)
-
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("영화 시장의 흥행은 전형적인 롱테일(Long Tail) 구조를 띠어 대다수의 영화는 소규모 관객 구간에 몰려 있고 소수의 극단적 대형 흥행작이 우측 끝에 위치합니다.")
 
 st.divider()
 
@@ -202,11 +159,6 @@ fig4.update_layout(
 )
 
 st.plotly_chart(fig4, use_container_width=True)
-
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("개봉일 스크린수가 많을수록 대체로 총 관객 수도 증가하는 양의 상관관계를 보이지만, 초기 스크린수가 적어도 입소문을 통해 대흥행을 기록하는 예외 사례도 존재합니다.")
 
 st.divider()
 
@@ -245,11 +197,6 @@ fig5.update_layout(
 )
 
 st.plotly_chart(fig5, use_container_width=True)
-
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("장르별 중간값(중앙값)은 대개 수십만 명 수준에 형성되어 있으나, 일부 장르에서는 상자 밖의 극단적 흥행작(이상치)이 발생하여 동일 장르 내에서도 영화 간 관객 수 편차가 매우 큼을 알 수 있습니다.")
 
 st.divider()
 
@@ -292,11 +239,6 @@ fig6.update_layout(
 
 st.plotly_chart(fig6, use_container_width=True)
 
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("개봉일 스크린수가 많고 개봉 첫 주 관객 수(버블 크기)가 큰 영화일수록 최종 총 관객 수도 대폭 높게 형성되며, 초기 집객 성과가 최종 흥행 성공 여부에 강력한 영향을 미침을 알 수 있습니다.")
-
 st.divider()
 
 # ==========================================
@@ -325,11 +267,6 @@ fig7.update_layout(
 )
 
 st.plotly_chart(fig7, use_container_width=True)
-
-# 그래프 해석 구역
-with st.container():
-    st.markdown("💡 **이 그래프로 알 수 있는 것**")
-    st.info("국가별로 제작되거나 개봉된 주요 영화 장르의 구조적 차이를 확인할 수 있으며, 특정 국가(예: 한국, 미국)에서 공급되는 장르의 다양성 및 집중도를 파악할 수 있습니다.")
 
 st.divider()
 
