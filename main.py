@@ -15,15 +15,20 @@ def load_data():
     url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis_movies.csv"
     df = pd.read_csv(url)
     
-    # 판다스 내장 벡터화 메서드로 안전하게 첫 번째 장르만 추출 (에러 수정)
+    # 결측치 처리 및 텍스트 정리
+    df['genre'] = df['genre'].fillna('기타')
+    df['nation'] = df['nation'].fillna('기타')
+    
+    # 판다스 내장 벡터화 메서드로 첫 번째 장르 추출
     df['main_genre'] = (
         df['genre']
-        .fillna('')
         .astype(str)
         .str.split('|')
         .str[0]
         .str.strip()
     )
+    df['main_genre'] = df['main_genre'].replace('', '기타')
+    df['nation'] = df['nation'].astype(str).str.strip().replace('', '기타')
     
     return df
 
@@ -299,10 +304,14 @@ st.divider()
 # ==========================================
 st.subheader("7. 제작 국가 및 장르별 영화 편수 (선버스트 차트)")
 
-# 선버스트 차트 생성 (계층: nation -> main_genre)
+# 제작 국가 및 장르별 영화 편수 사전 집계 (ValueError 방지 및 칸 크기 지정)
+df_sunburst = df.groupby(['nation', 'main_genre']).size().reset_index(name='movie_count')
+
+# 선버스트 차트 생성 (계층: nation -> main_genre, 칸 크기: movie_count)
 fig7 = px.sunburst(
-    df,
+    df_sunburst,
     path=['nation', 'main_genre'],
+    values='movie_count',
     title="제작 국가 → 장르별 영화 편수 구조 (선버스트 차트)",
     color_discrete_sequence=px.colors.qualitative.Pastel1
 )
@@ -320,4 +329,5 @@ st.plotly_chart(fig7, use_container_width=True)
 # 그래프 해석 구역
 with st.container():
     st.markdown("💡 **이 그래프로 알 수 있는 것**")
+    st.info("국가별로 제작되거나 개봉된 주요 영화 장르의 구조적 차이를 확인할 수 있으며, 특정 국가(예: 한국, 미국)에서 공급되는 장르의 다양성 및 집중도를 파악할 수 있습니다.")
     st.info("국가별로 제작되거나 입선된 주요 영화 장르의 구조적 차이를 확인할 수 있으며, 특정 국가(예: 한국, 미국)에서 공급되는 장르의 다양성 및 집중도를 파악할 수 있습니다.")
