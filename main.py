@@ -304,10 +304,10 @@ st.divider()
 # ==========================================
 st.subheader("7. 제작 국가 및 장르별 영화 편수 (선버스트 차트)")
 
-# 제작 국가 및 장르별 영화 편수 사전 집계 (ValueError 방지 및 칸 크기 지정)
+# 제작 국가 및 장르별 영화 편수 사전 집계
 df_sunburst = df.groupby(['nation', 'main_genre']).size().reset_index(name='movie_count')
 
-# 선버스트 차트 생성 (계층: nation -> main_genre, 칸 크기: movie_count)
+# 선버스트 차트 생성
 fig7 = px.sunburst(
     df_sunburst,
     path=['nation', 'main_genre'],
@@ -330,4 +330,44 @@ st.plotly_chart(fig7, use_container_width=True)
 with st.container():
     st.markdown("💡 **이 그래프로 알 수 있는 것**")
     st.info("국가별로 제작되거나 개봉된 주요 영화 장르의 구조적 차이를 확인할 수 있으며, 특정 국가(예: 한국, 미국)에서 공급되는 장르의 다양성 및 집중도를 파악할 수 있습니다.")
-    st.info("국가별로 제작되거나 입선된 주요 영화 장르의 구조적 차이를 확인할 수 있으며, 특정 국가(예: 한국, 미국)에서 공급되는 장르의 다양성 및 집중도를 파악할 수 있습니다.")
+
+st.divider()
+
+# ==========================================
+# 8. 10위권 머문 날수와 총 관객 수의 관계 (산점도)
+# ==========================================
+st.subheader("8. 10위권 머문 날수와 총 관객 수의 관계 (산점도)")
+
+st.markdown("❓ **나만의 8번째 질문**: *10위권에 오래 머문 영화는 총 관객 수도 많은가?*")
+
+# 산점도 그래프 생성
+fig8 = px.scatter(
+    df,
+    x='days_in_top10',
+    y='total_audi',
+    color='main_genre',
+    hover_name='movieNm',
+    custom_data=['main_genre'],
+    title="10위권에 머문 날수 vs 총 관객 수",
+    labels={'days_in_top10': '10위권에 머문 날수 (일)', 'total_audi': '총 관객 수 (명)', 'main_genre': '장르'},
+    color_discrete_sequence=px.colors.qualitative.Vivid
+)
+
+fig8.update_traces(
+    marker=dict(size=9, opacity=0.8),
+    hovertemplate="<b>%{hovertext}</b><br>장르: %{customdata[0]}<br>10위권 머문 날수: %{x}일<br>총 관객 수: %{y:,.0f}명<extra></extra>"
+)
+
+fig8.update_layout(
+    xaxis_title="10위권에 머문 날수 (일)",
+    yaxis_title="총 관객 수 (명)",
+    margin=dict(t=40, b=20, l=20, r=20),
+    legend_title_text="장르"
+)
+
+st.plotly_chart(fig8, use_container_width=True)
+
+# 그래프 해석 구역
+with st.container():
+    st.markdown("💡 **이 그래프로 알 수 있는 것**")
+    st.info("10위권에 머문 날수가 길수록 총 관객 수가 증가하는 명확한 양의 상관관계를 보여줍니다. 초기 상영 스크린 수나 개봉 첫 주 흥행도 중요하지만, 10위권 내에서 오래 잔류하는 '장기 흥행(롱런)' 능력이 최종 천만 관객 등 대형 흥행을 만드는 데 핵심 요소임을 알 수 있습니다.")
